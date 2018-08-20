@@ -3,6 +3,7 @@ import os
 
 def Start():
     try:
+        # choose your file path
         path = r'C:\logs'
         if not os.path.exists(path):
             os.makedirs(path)

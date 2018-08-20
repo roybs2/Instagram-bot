@@ -84,7 +84,12 @@ def AutoLiker(numberOfLiks):
             driver.get("{}{}".format(tagPagePrefix, tag))
 
             listOfPosts = driver.find_elements_by_class_name(postClassName)
-            for i in range(0, numberOfLiks):
+            if(numberOfLikes > len(listOfPosts)):
+                maxRange = listOfPosts
+            else:
+                maxRange = numberOfLikes
+
+            for i in range(0, maxRange):
                 try:
                     listOfPosts[i].click()
                     time.sleep(1)
@@ -124,4 +129,4 @@ def MainAutoLiker():
 
     driver.close()
 
-
+MainAutoLiker()
