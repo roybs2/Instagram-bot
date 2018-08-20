@@ -85,7 +85,7 @@ def AutoLiker(numberOfLiks):
 
             listOfPosts = driver.find_elements_by_class_name(postClassName)
             if(numberOfLikes > len(listOfPosts)):
-                maxRange = listOfPosts
+                maxRange = len(listOfPosts)
             else:
                 maxRange = numberOfLikes
 
