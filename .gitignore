@@ -1,6 +1,5 @@
-# git ignore file
+
 
 .idea/
-*.pyc
-config.ini/
 *.log
+*.pyc
