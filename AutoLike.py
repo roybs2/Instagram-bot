@@ -1,8 +1,8 @@
-from selenium import webdriver
-import selenium
 import time
 import ConfigParser
 import LogHandler
+import SeleniumConfig
+import selenium
 
 global driver, userName, password, config, likeClassName, unLikeClassName, logger, numberOfLikes
 
@@ -13,7 +13,8 @@ def Init():
     logger.getLogger('AutoLike')
 
     try:
-        driver = webdriver.Chrome()
+        driver = SeleniumConfig.InitSelenium()
+
         config = ConfigParser.ConfigParser()
         config.read('config.ini')
         userName = config.get('DEFAULT','userName')
@@ -52,13 +53,7 @@ def Search(Tag):
     searchResult = driver.find_elements_by_class_name('yCE8d')
     searchResult[0].click()
 
-def ChangeToMobileView():
-    mobile_emulation = {"deviceName": "Nexus 5"}
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
-    #driver = webdriver.Chrome(chrome_options=chrome_options)
-    driver.create_options(chrome_options)
-    driver.refresh()
+
 
 def AutoLike():
     try:
@@ -69,8 +64,8 @@ def AutoLike():
             driver.find_element_by_class_name(unLikeClassName)
             logger.info("Post was already liked")
         except Exception as ex:
-            logger.error("Unable to do like with class name: {}. Exception: {}".format(likeClassName, e))
-            raise Exception('Internal Error')
+            logger.error("Unable to do like with class name: {}, url: {}. Exception: {}".format(likeClassName,
+                                                                                                driver.current_url, e))
 
 
 def AutoLiker(numberOfLiks):
@@ -129,4 +124,6 @@ def MainAutoLiker():
 
     driver.close()
 
+
+# to run without flask:
 MainAutoLiker()
