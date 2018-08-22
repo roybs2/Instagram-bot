@@ -1,3 +1,4 @@
 # git ignore file
 
 .idea/
+debug\.log
