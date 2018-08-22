@@ -1,4 +1,3 @@
-import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import ConfigParser
@@ -21,19 +20,25 @@ class SeleniumConfiguration():
             try:
                 optionsString = config.get('DEFAULT', 'chromeOptions')
                 optionsList = optionsString.split(",")
-                chrome_options = Options()
+                self.chrome_options = Options()
 
                 for option in optionsList:
-                    chrome_options.add_argument(option)
+                    self.chrome_options.add_argument(option)
 
-                self.Driver = webdriver.Chrome(chrome_options=chrome_options)
+                self.Driver = webdriver.Chrome(chrome_options=self.chrome_options)
             except:
                 logger.info("Chrome options don't exist")
                 self.Driver = webdriver.Chrome()
         except Exception as e:
             logger.error("Unable to config web driver. Exception: {}".format(e))
 
-
+    # def ChangeToMobileView(self):
+    #     mobile_emulation = {"deviceName": "iPhone X"}
+    #     chrome_options = webdriver.ChromeOptions()
+    #     chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
+    #     # driver = webdriver.Chrome(chrome_options=chrome_options)
+    #     self.Driver.create_options(chrome_options)
+    #     self.Driver.refresh()
 
 # def InitSelenium():
 #     try:
@@ -58,11 +63,3 @@ class SeleniumConfiguration():
 #     except Exception as e:
 #         logger.error("Unable to config web driver. Exception: {}".format(e))
 
-
-# def ChangeToMobileView():
-#     mobile_emulation = {"deviceName": "Nexus 5"}
-#     chrome_options = webdriver.ChromeOptions()
-#     chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
-#     #driver = webdriver.Chrome(chrome_options=chrome_options)
-#     driver.create_options(chrome_options)
-#     driver.refresh()
