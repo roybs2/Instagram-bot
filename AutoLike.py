@@ -3,22 +3,22 @@ import ConfigParser
 import LogHandler
 import SeleniumConfig
 import selenium
+import LoginPage
 
-global driver, userName, password, config, likeClassName, unLikeClassName, logger, numberOfLikes
+global driver, config, likeClassName, unLikeClassName, logger, numberOfLikes
 
 def Init():
-    global driver, config, userName, password, likeClassName, unLikeClassName, logger, numberOfLikes
+    global driver, config, likeClassName, unLikeClassName, logger, numberOfLikes
 
     logger = LogHandler.Start()
     logger.getLogger('AutoLike')
 
     try:
-        driver = SeleniumConfig.InitSelenium()
+        driver = SeleniumConfig.SeleniumConfiguration()
+        driver = driver.Driver
 
         config = ConfigParser.ConfigParser()
         config.read('config.ini')
-        userName = config.get('DEFAULT','userName')
-        password = config.get('DEFAULT','password')
         likeClassName = config.get('DEFAULT', 'likeClassName')
         unLikeClassName = config.get('DEFAULT', 'unLikeClassName')
         numberOfLikes = config.get('DEFAULT', 'numberOfLikes')
@@ -26,23 +26,6 @@ def Init():
     except Exception as e:
         logger.error("Unable to init chrome driver or config file. Exception: %s", e)
         raise Exception('Unable to init')
-
-
-def Login():
-    try:
-        driver.get(config.get('DEFAULT','instagramLogin'))
-        time.sleep(2)
-
-        userNameTextBox = driver.find_element_by_name('username')
-        userNameTextBox.send_keys(userName)
-        passwordTextBox = driver.find_element_by_name('password')
-        passwordTextBox.send_keys(password)
-
-        loginButton = driver.find_element_by_class_name('_5f5mN')
-        loginButton.click()
-    except Exception as e:
-        logger.error("Unable to login to instagram with username:{}, psasword:{}. Exception: {}".format(userName, password, e))
-        raise Exception('Internal Error')
 
 
 # select the first option of the search
@@ -117,7 +100,7 @@ def UploadPost(picture, textBox, tags):
 
 def MainAutoLiker():
     Init()
-    Login()
+    LoginPage.Login()
 
     time.sleep(1)
     AutoLiker(int(numberOfLikes))
