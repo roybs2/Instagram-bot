@@ -40,26 +40,5 @@ class SeleniumConfiguration():
     #     self.Driver.create_options(chrome_options)
     #     self.Driver.refresh()
 
-# def InitSelenium():
-#     try:
-#         config = ConfigParser.ConfigParser()
-#         config.read('config.ini')
-#         try:
-#             optionsString = config.get('DEFAULT','chromeOptions')
-#             optionsList = optionsString.split(",")
-#
-#             chrome_options = Options()
-#
-#             for option in optionsList:
-#                 chrome_options.add_argument(option)
-#
-#             driver = webdriver.Chrome(chrome_options=chrome_options)
-#         except:
-#             logger.info("Chrome options don't exist")
-#             driver = webdriver.Chrome()
-#
-#
-#         return driver
-#     except Exception as e:
-#         logger.error("Unable to config web driver. Exception: {}".format(e))
+
 
