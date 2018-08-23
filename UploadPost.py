@@ -4,7 +4,7 @@ import LogHandler
 import imp
 import os
 import base64
-import time
+import AutoLike
 from google_images_download import google_images_download
 from random import randint
 import schedule
@@ -13,18 +13,15 @@ singletonClass = imp.load_source('Singleton', 'Utilities/Singleton.py')
 @singletonClass.singleton
 class Upload:
     def __init__(self):
-        config = ConfigParser.ConfigParser()
-        config.read('config.ini')
+        self.config = ConfigParser.ConfigParser()
+        self.config.read('config.ini')
 
         self.logger = LogHandler.Start()
         self.logger.getLogger('AutoLike')
 
-        self.captionTags = config.get('DEFAULT','tags')
-        self.InstagramAPI = InstagramAPI(config.get('DEFAULT','userName'), config.get('DEFAULT','password'))
+        self.captionTags = self.config.get('DEFAULT','tags')
+        self.InstagramAPI = InstagramAPI(self.config.get('DEFAULT','userName'), self.config.get('DEFAULT','password'))
         self.InstagramAPI.login()  # login
-
-
-
 
         #Download pictures:
         self.searchKeyword = "best success quotes"
@@ -41,6 +38,10 @@ class Upload:
             tags = '#' + self.captionTags
             tags = tags.replace(',', ' #')
             caption = title + ' ' + tags
+
+            self.InstagramAPI = InstagramAPI(self.config.get('DEFAULT', 'userName'), self.config.get('DEFAULT', 'password'))
+            self.InstagramAPI.login()  # login
+
             self.InstagramAPI.uploadPhoto(postPath, caption=caption)
         except Exception as e:
             self.logger.error(
@@ -59,14 +60,15 @@ class Upload:
 
     def AutoUploadImage(self):
         randomNumber = randint(0,50)
-
+        randomTitle = randint(0, 9)
+        title = self.config.get('DEFAULT', 'titles').split(',')[randomTitle]
         # todo: add check if file is image
         if self.CheckIfImageExistInFolder(self.images[self.searchKeyword][randomNumber]):
-            self.UploadPost(self.images[self.searchKeyword][randomNumber], 'So, how was your day? :)')
+            self.UploadPost(self.images[self.searchKeyword][randomNumber], title)
 
     def ScheduleUpload(self):
-        schedule.every(10).minutes.do(self.AutoUploadImage)
-
+        schedule.every().hour.do(self.AutoUploadImage)
+        schedule.every(70).minutes.do(AutoLike.MainAutoLiker)
         while 1:
             schedule.run_pending()
 

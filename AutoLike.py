@@ -94,7 +94,7 @@ def AutoLiker(numberOfLiks):
                     time.sleep(1)
                 except Exception as e:
                     logger.error("Can not do like for: tag: {}, postClassName: {}. Exception: {}".format(tag, postClassName, e))
-                    raise Exception('Internal Error')
+                    #raise Exception('Internal Error')
 
         except Exception as e:
             logger.error("Something in the auto liker went wrong. Exception: {}".format(e))
